@@ -8,6 +8,7 @@ const App = {
 
     init: () => {
         App.checkAuth();
+        MedAI.init(); // Initialize AI Assistant
     },
 
     checkAuth: () => {
@@ -186,6 +187,19 @@ const App = {
                     </div>
                 </header>
 
+                <!-- AI Insights Section -->
+                <div class="ai-insights-section">
+                    ${MedAI.getInsights().map(insight => `
+                        <div class="smart-card ${insight.type}">
+                            <div class="smart-icon">${insight.icon}</div>
+                            <div>
+                                <div class="smart-title">${insight.title}</div>
+                                <div class="smart-text">${insight.text}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
                 <div class="card-grid">
                      <div class="stat-card">
                         <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M9 19H7V17H9V19M13 19H11V17H13V19M17 19H15V17H17V19M9 15H7V13H9V15M13 15H11V13H13V15M17 15H15V13H17V15M9 11H7V9H9V11M13 11H11V9H13V11M17 11H15V9H17V11M9 7H7V5H9V7M13 7H11V5H13V7M17 7H15V5H17V7Z" /></svg></div>
@@ -336,7 +350,10 @@ const App = {
             </div>
 
             <div class="animate-slide-in" style="margin-bottom: 20px; display: flex; gap: 10px;">
-                <input type="text" id="searchInput" placeholder="Search medicines..." style="flex: 2" onkeyup="App.filterInventory()">
+                <div style="flex: 2; position: relative;">
+                    <input type="text" id="searchInput" placeholder="Search medicines... (or click mic)" style="width: 100%; padding-right: 40px;" onkeyup="App.filterInventory()">
+                    <button onclick="MedAI.startVoiceSearch()" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem;">🎤</button>
+                </div>
                 <select id="categoryFilter" style="flex: 1" onchange="App.filterInventory()">
                     <option value="">All Categories</option>
                     <option value="Tablet">Tablet</option>
